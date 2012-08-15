@@ -1,8 +1,9 @@
 boxdav mounts your Box account via WebDAV
 on a Linux machine.
 
-Mount usage:   sudo ./boxdav.sh [-b user@example.com]
-Unmount usage: sudo ./boxdav.sh -u [-b user@example.com]
+Mount usage:   sudo boxdav [-b user@example.com]
+
+Unmount usage: sudo boxdav -u [-b user@example.com]
 
 The mount point will be: /boxdav/user@example.com
 (Where user@example.com is your Box account.)
