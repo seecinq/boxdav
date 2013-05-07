@@ -5,7 +5,7 @@ Mount usage:   sudo boxdav [-b user@example.com]
 
 Unmount usage: sudo boxdav -u [-b user@example.com]
 
-The mount point will be: /boxdav/user@example.com
+The mount point will be: /mnt/boxdav/user@example.com
 (Where user@example.com is your Box account.)
 
 If the -b flag is not given, you will be prompted
