@@ -67,22 +67,22 @@ fi
 mount_box()
 {
 	box_account=$1
-	mkdir -p /boxdav/${box_account}
+	mkdir -p /mnt/boxdav/${box_account}
 	if (( $? != 0 )) ; then
-		echo "ERROR creating /boxdav/${box_account}"
+		echo "ERROR creating /mnt/boxdav/${box_account}"
 		exit 1
 	fi
 	echo -n "${box_account}"
 	stty -echo
-	mount -t davfs https://www.box.com/dav /boxdav/${box_account} -o rw,username=${box_account},uid=$SUDO_USER,gid=$SUDO_USER,file_mode=0600,dir_mode=0700,nodev,nosuid,noexec
+	mount -t davfs https://dav.box.com/dav /mnt/boxdav/${box_account} -o rw,username=${box_account},uid=$SUDO_USER,gid=$SUDO_USER,file_mode=0600,dir_mode=0700,nodev,nosuid,noexec
 	mount_return=$?
 	stty echo
 	if (( $mount_return != 0 )) ; then
-		echo "ERROR mounting /boxdav/${box_account}"
+		echo "ERROR mounting /mnt/boxdav/${box_account}"
 		exit 1
 	else
 		echo
-		echo "SUCCESS mounted /boxdav/${box_account}"
+		echo "SUCCESS mounted /mnt/boxdav/${box_account}"
 		echo "To unmount it, run sudo $0 -u -b ${box_account}"
 	fi
 }
@@ -90,19 +90,19 @@ mount_box()
 umount_box()
 {
 	box_account=$1
-	mount=$(awk '$1=="https://www.box.com/dav" {print $2}' /proc/mounts | grep ^"/boxdav/${box_account}"$ | head -1)
-	if [[ "/boxdav/${box_account}" = "${mount}" && -d "${mount}" ]] ; then
+	mount=$(awk '$1=="https://dav.box.com/dav" {print $2}' /proc/mounts | grep ^"/mnt/boxdav/${box_account}"$ | head -1)
+	if [[ "/mnt/boxdav/${box_account}" = "${mount}" && -d "${mount}" ]] ; then
 		echo "Unmounting ${mount}"
-		umount "/boxdav/${box_account}"
+		umount "/mnt/boxdav/${box_account}"
 		if (( $? != 0 )) ; then
-			echo "ERROR unmounting /boxdav/${box_account}"
+			echo "ERROR unmounting /mnt/boxdav/${box_account}"
 			exit 1
 		else
-			echo "SUCCESS unmounted /boxdav/${box_account}"
-			rmdir --ignore-fail-on-non-empty "/boxdav/${box_account}"
+			echo "SUCCESS unmounted /mnt/boxdav/${box_account}"
+			rmdir --ignore-fail-on-non-empty "/mnt/boxdav/${box_account}"
 		fi
 	else
-		echo "/boxdav/${box_account} not found"
+		echo "/mnt/boxdav/${box_account} not found"
 		exit 1
 	fi
 }
