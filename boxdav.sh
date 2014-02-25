@@ -36,7 +36,8 @@ on a Linux machine.
 Mount usage:   sudo $0 [-b user@example.com]
 Unmount usage: sudo $0 -u [-b user@example.com]
 
-The mount point will be: /boxdav/user@example.com
+#use /mnt as top directory
+The mount point will be: /mnt/boxdav/user@example.com
 (Where user@example.com is your Box account.)
 
 If the -b flag is not given, you will be prompted
@@ -74,7 +75,9 @@ mount_box()
 	fi
 	echo -n "${box_account}"
 	stty -echo
+
 	mount -t davfs https://dav.box.com/dav /mnt/boxdav/${box_account} -o rw,username=${box_account},uid=$SUDO_USER,gid=$SUDO_USER,file_mode=0600,dir_mode=0700,nodev,nosuid,noexec
+
 	mount_return=$?
 	stty echo
 	if (( $mount_return != 0 )) ; then
@@ -90,7 +93,9 @@ mount_box()
 umount_box()
 {
 	box_account=$1
+
 	mount=$(awk '$1=="https://dav.box.com/dav" {print $2}' /proc/mounts | grep ^"/mnt/boxdav/${box_account}"$ | head -1)
+
 	if [[ "/mnt/boxdav/${box_account}" = "${mount}" && -d "${mount}" ]] ; then
 		echo "Unmounting ${mount}"
 		umount "/mnt/boxdav/${box_account}"
